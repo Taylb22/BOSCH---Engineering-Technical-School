@@ -1,0 +1,3 @@
+1;Amor;Bolo;Cão;Avião;Rato;
+2;Brasil;Teoria;Cidade;Computador;Morcego;
+3;Paralelepipedo;Bidirecional;Otorrinolaringologista;Braçadeira;Decomposição;

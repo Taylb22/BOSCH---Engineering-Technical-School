@@ -1,0 +1,58 @@
+Sem utilizar nenhuma biblioteca faça um programa que seja capaz de ler um JSON independente do
+formato, utilize os arquivos t1.json, t2.json, t3.json e t4.json para testar o funcionamento.
+
+Exemplo 1:
+
+data = read_json('t1./json')
+print(data["0"])
+
+output:
+0
+
+
+Exemplo 2:
+
+data = read_json('t2./json')
+print(data["squared"]["4"])
+print(data["squared_root"]["4"])
+
+output:
+16
+2
+
+
+Exemplo 3:
+
+data = read_json('t3./json')
+print(data["students"][2]["name"])
+
+output:
+C0
+
+
+
+=================================================================
+
+
+
+Com base na leitura feita do JSON, imprima no terminal os valores lidos formatados.
+Exemplo:
+
+data = read_json('./t1.json')
+print_formated(data)
+
+output:
+{
+    "0" : "0",
+    "1" : "1",
+    "2" : "3",
+    "3" : "9",
+    "4" : "16",
+    "5" : "25",
+    "6" : "36"
+} 
+
+Sendo as funções read_json() e print_formated() desenvolvida por voce.
+Isso deve funcionar para todos os 4 arquivos.
+a função print_formated() nao deve de modo algum utilizar do arquivo .json original, deve ser baseada 100%
+no retorno da função read_json()

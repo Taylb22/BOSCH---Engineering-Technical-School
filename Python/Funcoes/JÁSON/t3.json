@@ -1,0 +1,24 @@
+{
+    "students" : [
+        {
+            "name" : "A0",
+            "hobby" : "A1"
+        },
+        {
+            "name" : "B0",
+            "hobby" : "B1"
+        },
+        {
+            "name" : "C0",
+            "hobby" : "C1"
+        },
+        {
+            "name" : "D0",
+            "hobby" : "D1"
+        },
+        {
+            "name" : "E0",
+            "hobby" : "E1"
+        }
+    ]
+}
