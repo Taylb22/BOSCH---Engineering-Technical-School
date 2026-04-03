@@ -1,79 +1,64 @@
 import typing
 
-def open_matrix(file):
+def open_matrix(file): #função para ler o arquivo.txt do problema
     matriz = []
     with open(file, 'r') as arquivo:
-        # arquivo = arquivo.read()
-        # linha = []
-        
-        # for char in range(len(arquivo)):
-            # if arquivo[char] == "[":
         for line in arquivo.readlines():
-            # print(line)
-            # line.strip()
             aux = line.split(' ')
-            # print(aux)
             new_line = []
             for item in aux:
                 if item != '':
                     new_line.append(int(item))
             matriz.append(new_line)
-                    # if arquivo[i] == ']':
-                    #     matriz.append(linha.copy())
-                    #     linha.clear()
-                    #     break
-                    # if arquivo[i].isnumeric():
-                    #     linha.append(int(arquivo[i]))
+
         
         return matriz
 
+#memo = {(mask, current) : (ans, route)} -> Estrutura do nosso memoization
 memo = {}
-def find_best(cities : list[list[int]], history : list) -> list:
-    current = history[-1]
+def find_best(cities : list[list[int]], mask : int, current : int, start=0) -> list:
+    key = (mask, current) #Formulando a chave
     
-    # key = (history, current)
+    if key in memo: #Evitando cálculo redundante com memoization
+        ans, route = memo[key]
+        return ans, route
 
-    # if key in memo:
-    #     route, sum = memo[key]
-    #     return route, sum
-
-    if len(history) == len(cities):
-        result = [current, history[0]]
-        sum = cities[current][history[0]]
-        return result, sum
-
-    results = {}
-    for i in range(len(cities[current])):
-        if not(i in history):
-            route, sum = find_best(cities, history + [i])
-            results[i] = (route, sum)
     
-    best_route = None
-    best_sum = float('inf')
-    for i in results.keys():
-        if results[i][1] < best_sum:
-            best_route = results[i][0]
-            best_sum = results[i][1]
+    n = len(cities)
 
-    route = [current] + best_route
-    sum = cities[current][route[1]] + best_sum
-    # memo[key] = (route, sum)
-    return route, sum
+    if mask == 2**n - 1: #verificando se todas as cidades já foram visitadas
+        ans = cities[current][start]
+        route = [current + 1] + [start + 1]
+        memo[key] = (ans, route) #memorização da rota
+        return ans, route
+    
+    route = None
+    ans = float('inf')
+    for i in range(len(cities[current])): #percorrendo todas as rotas possíveis a partir da cidade atual
+        if not(mask >> i & 1 == 1): #verificando se a a cidade a se visitar ainda não foi visitada
+            mask = mask | 1 << i #atribuindo a cidade como "visitada"
+            s, r = find_best(cities, mask, current=i, start=start) #recursividade para explorar a rota
+            if cities[current][i] + s < ans: #verificando se a rota encontrada é a melhor até agora
+                ans = cities[current][i] + s #soma da rota
+                route = [current + 1] + r #a rota em si
+            mask = mask ^ 1 << i #backtracking
 
-def TSP(cities : list[list[int]], start : int) -> list:
+    memo[key] = (ans, route) #memorização da rota
+    return ans, route
+
+def TSP(cities : list[list[int]], start=1) -> list: #Função "Máscara", função temporária que só serve para tornar mais fácil para o usuário
     memo.clear()
-    start -= 1
-    route, sum = find_best(cities, [start])
+    start -= 1 #padronização, pois o codigo utiliza o indice, porém, a intenção é que o usuário indique o número da cidade em si
+    mask = 0 >> len(cities) - 1 #Máscara (em Bits) que armazena "true" e "false" para identificar quais cidades foram visitadas
+    mask = mask | 1 << start #Operação "or" para definir que a cidade inicial já foi visitada
+    ans, route = find_best(cities, mask, current=start, start=start)
 
-    for i in range(len(route)):
-        route[i] += 1
+    return ans, route
 
-    return route, sum
-
-matrix = open_matrix("S:/COM/Human_Resources/01.Engineering_Tech_School/02.Internal/5 - Aprendizes/5 - Análise de dados/2 - Análise de dados 2025/Henrique dos Santos/Python/Projeto/b.txt")
+matrix = open_matrix("S:/COM/Human_Resources/01.Engineering_Tech_School/02.Internal/5 - Aprendizes/5 - Análise de dados/2 - Análise de dados 2025/Henrique dos Santos/Python/Projeto/26_cidades.txt")
 for row in matrix:
     print(row)
 print()
 
-route, sum = TSP(matrix, start=1)
+sum, route = TSP(matrix, start=1) #Defina de qual cidade deseja partir (o parametro "start" não é indexado)
 print(f"ROTA -> {route}\nSOMA -> {sum}")
