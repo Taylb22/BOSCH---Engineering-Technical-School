@@ -1,0 +1,66 @@
+from lib import *
+import random as rd
+
+def validate_position(y, x):
+    if x < 0 or x > (width - 1):
+        return False
+    if y < 0 or y > (height - 1):
+        return False
+    return True
+
+def count_neighbour(emap, x, y) -> int:
+    coordinates = [
+        (-1, -1), (-1, 0), (-1, 1),
+        (0,  -1),          (0,  1),
+        (1,  -1), (1,  0), (1,  1)
+    ]
+    
+    n = 0
+    for y_inc, x_inc in coordinates:
+        if validate_position(y + y_inc, x + x_inc) and emap[y + y_inc][x + x_inc]['color'] == (0, 0, 0):
+            n += 1
+    return n
+    
+
+def behaviour(e, e_map):
+    n = count_neighbour(e_map, e['x'], e['y'])
+    
+    vivo = e['color'] == (0, 0, 0)
+    
+    if vivo:
+        if n < 2 or n > 4:
+            if rd.randint(1, 25) != 1:
+                e['color'] = (255, 255, 255)
+    else:
+        if n == 3:
+            e['color'] = (0, 0, 0)
+
+height = 108
+width = 192
+pixel_size = 10
+background_map = get_map(width, height, pixel_size)
+e_map = get_map(width, height, pixel_size)
+
+dead_cell = {
+    'label' : 'dead_cell',
+    'z'     : 1,
+    'color' : (255, 255, 255),
+    'func'  : behaviour
+}
+
+live_cell = {
+    'label' : 'live_cell',
+    'z'     : 1,
+    'color' : (0, 0, 0),
+    'func'  : behaviour
+}
+
+for i in range(height):
+    for j in range(width):
+        e_map[i][j] = dead_cell.copy()
+
+e_map[50][49] = live_cell.copy()
+e_map[50][50] = live_cell.copy()
+e_map[50][51] = live_cell.copy()
+
+start(e_map=e_map, bg_map=background_map, bg=(255, 255, 255), actions_per_second=60, show_len=True)

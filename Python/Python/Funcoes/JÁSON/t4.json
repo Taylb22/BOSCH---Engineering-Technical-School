@@ -1,0 +1,20 @@
+{
+    "name" : "A0",
+    "hoobies" : [
+        {
+            "title" : "dance",
+            "description" : "pirouette"
+        },
+        {
+            "title" : "code",
+            "description" : "pain"
+        }
+    ],
+    "age" : 18,
+    "pet" : {
+        "type" : "cat",
+        "name" : "Mr. Moustache",
+        "alive" : false
+    } ,
+    "alive" : true
+}
